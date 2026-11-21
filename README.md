@@ -38,6 +38,22 @@ Never run any of these unless we have decided to give up on the data:
 - Stuck at logo with SD card in; Windows saw only an error-43 "Device Descriptor Request Failed" device that kept reconnecting.
 - Removing the SD card -> device showed the **battery empty** screen. Likely cause: nearly dead battery (plus SD card delaying boot). Charging on a wall charger next.
 - After charging, with the SD card still out: **boots normally into the custom frontend.** Not bricked. Next: re-insert SD card to see whether it causes the hang.
+- SD card re-inserted: device rebooted and **works normally with the card in**.
+
+## Diagnosis
+
+**Root cause: a fully drained battery.** At near-zero charge the RG405M sat at the
+bootloader logo (the "LOCK IS UNLOCK / SKIP VERIFY" banner is normal for an
+unlocked bootloader) and power-cycled instead of showing the charge screen.
+After charging it boots fine, with or without the SD card. Nothing was erased.
+
+**Open issue:** Windows only ever sees the device as error 43 "Device
+Descriptor Request Failed", even with Android running. That points to a
+charge-only/worn USB-C cable or a dirty USB-C port on the device. Try a
+known data cable, then choose "File transfer" in the device's USB notification.
+
+**If it happens again:** charge it switched off on a wall charger for 30+ min
+before deciding it's bricked.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\watch-usb.ps1
