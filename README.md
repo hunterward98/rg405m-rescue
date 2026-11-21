@@ -40,6 +40,38 @@ Never run any of these unless we have decided to give up on the data:
 - After charging, with the SD card still out: **boots normally into the custom frontend.** Not bricked. Next: re-insert SD card to see whether it causes the hang.
 - SD card re-inserted: device rebooted and **works normally with the card in**.
 
+## Connecting to the device (for humans and AI agents)
+
+What has actually worked so far: **detection only.** No data has ever been
+exchanged. Windows lists the device as
+`USB\VID_0000&PID_0002` "Unknown USB Device (Device Descriptor Request Failed)",
+problem code 43, on `Port_#0003.Hub_#0002`.
+
+Check what Windows sees (read-only):
+
+```powershell
+Get-PnpDevice -PresentOnly | Where-Object { $_.InstanceId -match 'VID_0000|VID_1782|VID_18D1' -or $_.Class -in 'WPD','AndroidUsbDeviceClass' } | Format-Table Status, Class, FriendlyName, InstanceId -AutoSize
+```
+
+or stream changes with `scripts/watch-usb.ps1`.
+
+To get real access, fix the USB data link first:
+
+1. Use a known **data** USB-C cable (many are charge-only) and a rear motherboard port.
+   Inspect the RG405M's USB-C port for lint.
+2. Success looks like a new device with `VID_1782` or `VID_18D1`, or class `WPD`,
+   instead of `VID_0000`.
+3. **Files (MTP):** on the device, pull down notifications, tap the USB notification,
+   choose **File transfer**. It then appears in File Explorer.
+4. **Shell (ADB):** Settings > About > tap Build number 7x > Developer options >
+   enable **USB debugging**; install Google platform-tools
+   (https://developer.android.com/tools/releases/platform-tools); run
+   `adb devices` and accept the prompt on the device. Then
+   `scripts/device-diag.ps1 -Tools <platform-tools dir>` collects read-only info,
+   and `scrcpy` (https://github.com/Genymobile/scrcpy) can mirror the screen.
+
+Never run `fastboot -w`, `erase`, `format`, or factory reset — see "Rule" above.
+
 ## Diagnosis
 
 **Root cause: a fully drained battery.** At near-zero charge the RG405M sat at the
