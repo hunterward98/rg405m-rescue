@@ -30,6 +30,13 @@ Never run any of these unless we have decided to give up on the data:
 | Script | What it does |
 | --- | --- |
 | `scripts/watch-usb.ps1` | Read-only. Prints every USB device that appears/disappears and names the RG405M mode (download / fastboot / ADB / failed-to-enumerate). |
+| `scripts/inspect-sdcard.ps1` | Read-only. Reports the microSD card's partitions, health and top-level folders from a PC card reader; `chkdsk` without `/f`. |
+| `scripts/device-diag.ps1` | Read-only. With adb or fastboot connected, saves getprop, storage, battery, logcat/dmesg or `fastboot getvar all` to a folder. `-Tools <dir with adb.exe>` |
+
+## Progress log
+
+- Stuck at logo with SD card in; Windows saw only an error-43 "Device Descriptor Request Failed" device that kept reconnecting.
+- Removing the SD card -> device showed the **battery empty** screen. Likely cause: nearly dead battery (plus SD card delaying boot). Charging on a wall charger next.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\watch-usb.ps1
