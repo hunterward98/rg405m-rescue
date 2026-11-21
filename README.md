@@ -37,6 +37,7 @@ Never run any of these unless we have decided to give up on the data:
 
 - Stuck at logo with SD card in; Windows saw only an error-43 "Device Descriptor Request Failed" device that kept reconnecting.
 - Removing the SD card -> device showed the **battery empty** screen. Likely cause: nearly dead battery (plus SD card delaying boot). Charging on a wall charger next.
+- After charging, with the SD card still out: **boots normally into the custom frontend.** Not bricked. Next: re-insert SD card to see whether it causes the hang.
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\watch-usb.ps1
